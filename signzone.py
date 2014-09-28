@@ -48,6 +48,7 @@ def main(args):
                        help='a zonefile to be signed')
     args = parser.parse_args(args)
     for z in args.zone:
+        check_zone(z)
         increase_zone_serial(z)
         keys = find_keys(z)
         sign_zone(z,keys)
