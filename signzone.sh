@@ -42,6 +42,14 @@ is_writable_file() {
 	[[ -w $file ]]
 }
 
+check_zone() {
+    local zone=$1
+    if ${PREFIX}/ldns-read-zone $zone > /dev/null
+        then pass
+        else exit 1
+    fi
+}
+
 usage () {
 	cat <<- EOF
 	usage: $PROGNAME zonefile
@@ -55,7 +63,8 @@ usage () {
 
 main() {
 	zone=$ARGS
-	echo $zone
+	echo "Signing ${zone}.."
+	check_zone $zone
 	if is_writable_file ${zone}.signed; then
 		increase_zone_serial_from_signed $zone	
 	else

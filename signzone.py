@@ -30,6 +30,12 @@ def sign_zone(zone,keys):
     exec_string = "ldns-signzone -e {expire} {zone} {keys}".format(expire=expire,zone=zone,keys=keys)
     subprocess.call(exec_string,shell=True)
 
+def check_zone(zone):
+    exec_string = "ldns-read-zone {zone} > /dev/null".format(zone=zone)
+    retcode = subprocess.call(exec_string,shell=True)
+    if not retcode:
+        sys.exit("There is an error in {zone}".format(zone=zone))
+        
 def main(args):
     parser = argparse.ArgumentParser(description= """
     This script uses the ldns-utilities to sign a zone. It is meant to be used in crontab
